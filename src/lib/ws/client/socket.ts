@@ -1,5 +1,10 @@
-import { ServerEventName, parseServerEvent, type ServerEventHandlers } from '../server/types';
-import { ClientEventName, type AnyClientEvent } from './types';
+import { parseServerEvent } from '../schemas';
+import {
+	type ServerEventHandlers,
+	ServerEventName,
+	ClientEventName,
+	type AnyClientEvent
+} from '../types';
 
 export class Socket {
 	private readonly ws: WebSocket;
