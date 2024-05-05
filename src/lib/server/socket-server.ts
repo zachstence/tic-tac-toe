@@ -9,13 +9,17 @@ import {
 	ServerEventName,
 	type AnyServerEvent
 } from '../events/types';
+import { GameService } from './game-service';
 
 export class SocketServer {
 	private readonly wss: WebSocketServer;
 
 	private readonly handlers: ClientEventHandlers;
 
-	constructor(httpServer: HttpServer | HttpsServer) {
+	constructor(
+		httpServer: HttpServer | HttpsServer,
+		private readonly gameService: GameService
+	) {
 		this.handlers = {
 			[ClientEventName.Test]: () => {},
 			[ClientEventName.Test2]: () => {}

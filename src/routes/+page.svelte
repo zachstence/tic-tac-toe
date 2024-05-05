@@ -1,11 +1,45 @@
 <script lang="ts">
-	import { Socket } from '$lib/client/socket';
-	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import type { PageServerData } from './$types';
 
-	onMount(() => {
-		const socket = new Socket();
-	});
+	export let data: PageServerData;
+
+	let games = data.games;
+
+	const createGame = async (): Promise<void> => {
+		const response = await fetch('/games', { method: 'POST' });
+		const { url } = await response.json();
+		goto(url);
+	};
+
+	const deleteGame = async (gameId: string): Promise<void> => {
+		await fetch(`/games/${gameId}`, { method: 'DELETE' });
+
+		const response = await fetch('/games');
+		const data = await response.json();
+		games = data.games;
+	};
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<button on:click={createGame}>Create Game</button>
+
+<table>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Num Players</th>
+		</tr>
+	</thead>
+	<tbody>
+		{#each games as game}
+			<tr>
+				<td>{game.id}</td>
+				<td>{game.players.length}</td>
+				<td>
+					<a href={`games/${game.id}`}>View</a>
+					<button on:click={() => deleteGame(game.id)}>Delete</button>
+				</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
