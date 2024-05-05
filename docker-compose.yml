@@ -7,6 +7,7 @@ services:
       - ./:/app
     ports:
       - 5173:5173
+      - 57778:57778 # vite HMR socket
     command: npm run dev -- --host
 
   redis:
