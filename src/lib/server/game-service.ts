@@ -36,9 +36,16 @@ export class GameService {
 		return games;
 	};
 
-	join = async (gameId: string, player: Player): Promise<Game> => {
+	join = async (gameId: string, playerId: string, name: string): Promise<Game> => {
 		const game = await this.getById(gameId);
 		if (game.players.length >= 2) throw new Error('Game is full');
+		if (game.players.map((p) => p.id).includes(playerId)) throw new Error('Player already in game');
+
+		const player: Player = {
+			id: playerId,
+			name,
+			positions: []
+		};
 
 		game.players.push(player);
 		game.activePlayerId = game.players[0].id;
