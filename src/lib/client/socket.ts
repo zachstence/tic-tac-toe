@@ -1,10 +1,10 @@
-import { parseServerEvent } from '../schemas';
+import { parseServerEvent } from '../events/schemas';
 import {
 	type ServerEventHandlers,
 	ServerEventName,
 	ClientEventName,
 	type AnyClientEvent
-} from '../types';
+} from '../events/types';
 
 export class Socket {
 	private readonly ws: WebSocket;

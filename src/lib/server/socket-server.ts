@@ -2,13 +2,13 @@ import { Server as HttpServer } from 'http';
 import { Server as HttpsServer } from 'https';
 import { WebSocketServer, WebSocket } from 'ws';
 
-import { parseClientEvent } from '../schemas';
+import { parseClientEvent } from '../events/schemas';
 import {
 	type ClientEventHandlers,
 	ClientEventName,
 	ServerEventName,
 	type AnyServerEvent
-} from '../types';
+} from '../events/types';
 
 export class SocketServer {
 	private readonly wss: WebSocketServer;
