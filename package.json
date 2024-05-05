@@ -9,7 +9,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "vitest"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.0.0",
@@ -23,6 +24,8 @@
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.35.1",
+    "ioredis": "^5.4.1",
+    "nanoid": "^5.0.7",
     "prettier": "^3.1.1",
     "prettier-plugin-svelte": "^3.1.2",
     "svelte": "^4.2.7",
@@ -31,6 +34,7 @@
     "typescript": "^5.0.0",
     "vite": "^5.0.3",
     "vite-sveltekit-node-ws": "^0.0.7",
+    "vitest": "^1.6.0",
     "ws": "^8.17.0",
     "zod": "^3.23.6"
   },

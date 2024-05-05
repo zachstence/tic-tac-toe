@@ -6,3 +6,5 @@ export const PlayerSchema = z.object({
 	name: z.string(),
 	positions: z.array(Position).max(3)
 });
+
+export type Player = z.infer<typeof PlayerSchema>;
