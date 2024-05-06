@@ -5,7 +5,7 @@ import {
 	type AnyClientEvent,
 	type AnyServerEvent
 } from './types';
-import { GameSchema } from '$lib/schemas';
+import { GameSchema, Position } from '$lib/schemas';
 
 /*
 	CLIENT
@@ -19,6 +19,11 @@ export const SchemaByClientEventName = {
 		eventName: z.literal(ClientEventName.Join),
 		gameId: z.string(),
 		name: z.string()
+	}),
+	[ClientEventName.Play]: z.object({
+		eventName: z.literal(ClientEventName.Play),
+		gameId: z.string(),
+		position: Position
 	})
 } satisfies SchemaByClientEventName;
 

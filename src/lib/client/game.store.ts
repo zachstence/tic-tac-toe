@@ -1,11 +1,11 @@
-import { Readable, Writable, writable } from 'svelte/store';
+import { Readable, Writable, get, writable } from 'svelte/store';
 import {
 	type ServerEventHandlers,
 	ServerEventName,
 	ServerEventHandler,
 	ClientEventName
 } from '../events/types';
-import { Game } from '$lib/schemas';
+import { Game, Position } from '$lib/schemas';
 import { Socket } from './socket';
 
 export class GameStore implements Readable<Game> {
@@ -33,11 +33,19 @@ export class GameStore implements Readable<Game> {
 		return this.store.subscribe(run, invalidate);
 	};
 
-	join = (gameId: string, name: string): void => {
+	join = (name: string): void => {
 		this.socket.send({
 			eventName: ClientEventName.Join,
-			gameId,
+			gameId: get(this.store).id,
 			name
+		});
+	};
+
+	play = (position: Position): void => {
+		this.socket.send({
+			gameId: get(this.store).id, // TODO we should need to send gameId here, should be able to get it from the player
+			eventName: ClientEventName.Play,
+			position
 		});
 	};
 

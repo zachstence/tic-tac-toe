@@ -5,7 +5,8 @@ import { SchemaByClientEventName, SchemaByServerEventName } from './schemas';
 	CLIENT
 */
 export enum ClientEventName {
-	Join = 'Join'
+	Join = 'Join',
+	Play = 'Play'
 }
 
 export type ClientEventByClientEventName = {

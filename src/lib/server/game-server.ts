@@ -15,12 +15,14 @@ export class GameServer {
 		private readonly gameService: GameService
 	) {
 		this.handlers = {
-			[ClientEventName.Join]: this.handleJoin
+			[ClientEventName.Join]: this.handleJoin,
+			[ClientEventName.Play]: this.handlePlay
 		};
 
 		this.socketServer.onEvent = (ws, event) => {
 			const handler = this.handlers[event.eventName];
-			handler(ws, event);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			handler(ws, event as any);
 		};
 	}
 
@@ -29,6 +31,20 @@ export class GameServer {
 		{ gameId, name }
 	): Promise<void> => {
 		const game = await this.gameService.join(gameId, socketId, name);
+
+		game.players.forEach((player) => {
+			this.socketServer.send(player.socketId, {
+				eventName: ServerEventName.GameUpdate,
+				game
+			});
+		});
+	};
+
+	handlePlay: ClientEventHandler<ClientEventName.Play> = async (
+		socketId,
+		{ gameId, position }
+	): Promise<void> => {
+		const game = await this.gameService.play(gameId, socketId, position);
 
 		game.players.forEach((player) => {
 			this.socketServer.send(player.socketId, {

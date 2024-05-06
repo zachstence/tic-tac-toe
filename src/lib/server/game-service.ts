@@ -43,7 +43,7 @@ export class GameService {
 			throw new Error('Player already in game');
 
 		const player: Player = {
-			id: socketId,
+			id: socketId, // TODO separate player id from socket id
 			socketId,
 			name,
 			positions: []
