@@ -1,42 +1,32 @@
-import { parseServerEvent } from '../events/schemas';
-import {
-	type ServerEventHandlers,
-	ServerEventName,
-	ClientEventName,
-	type AnyClientEvent
-} from '../events/types';
+import { parseServerEvent } from '$lib/events/schemas';
+import { AnyClientEvent, AnyServerEventHandler } from '$lib/events/types';
 
 export class Socket {
 	private readonly ws: WebSocket;
 
-	private readonly handlers: ServerEventHandlers;
+	private eventQueue: AnyClientEvent[] = [];
+
+	onEvent?: AnyServerEventHandler;
 
 	constructor() {
-		this.handlers = {
-			[ServerEventName.Test]: () => {
-				this.send({
-					name: ClientEventName.Test2,
-					otherField: 123
-				});
-			},
-			[ServerEventName.Test2]: () => {}
-		};
-
 		this.ws = new WebSocket(`ws${window.origin.slice(4)}/ws`);
 
+		this.ws.onopen = () => {
+			this.eventQueue.forEach(this.send);
+		};
 		this.ws.onmessage = (messageEvent): void => {
-			console.log({ messageEvent });
 			const event = parseServerEvent(JSON.parse(messageEvent.data));
-			const handler = this.handlers[event.name];
-
 			console.debug('[Socket] handling event', { event });
-
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			handler(event as any);
+			this.onEvent?.(event);
 		};
 	}
 
 	send = (event: AnyClientEvent): void => {
-		this.ws.send(JSON.stringify(event));
+		if (this.ws.readyState === WebSocket.OPEN) {
+			console.debug('[Socket] sending event', { event });
+			this.ws.send(JSON.stringify(event));
+		} else {
+			this.eventQueue.push(event);
+		}
 	};
 }

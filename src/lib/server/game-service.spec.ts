@@ -17,6 +17,7 @@ describe('GameService', () => {
 				players: [
 					{
 						id: 'player1Id',
+						socketId: 'socket1Id',
 						name: 'name',
 						positions: [
 							{ x: 0, y: 0 },
@@ -26,6 +27,7 @@ describe('GameService', () => {
 					},
 					{
 						id: 'player2Id',
+						socketId: 'socket2Id',
 						name: 'name',
 						positions: [
 							{ x: 0, y: 1 },
@@ -48,6 +50,7 @@ describe('GameService', () => {
 				players: [
 					{
 						id: 'player1Id',
+						socketId: 'socket1Id',
 						name: 'name',
 						positions: [
 							{ x: 0, y: 0 },
@@ -57,6 +60,7 @@ describe('GameService', () => {
 					},
 					{
 						id: 'player2Id',
+						socketId: 'socket2Id',
 						name: 'name',
 						positions: [
 							{ x: 1, y: 2 },
@@ -79,6 +83,7 @@ describe('GameService', () => {
 				players: [
 					{
 						id: 'player1Id',
+						socketId: 'socket1Id',
 						name: 'name',
 						positions: [
 							{ x: 0, y: 0 },
@@ -88,6 +93,7 @@ describe('GameService', () => {
 					},
 					{
 						id: 'player2Id',
+						socketId: 'socket2Id',
 						name: 'name',
 						positions: [
 							{ x: 1, y: 1 },

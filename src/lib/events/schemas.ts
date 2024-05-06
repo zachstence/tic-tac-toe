@@ -5,32 +5,30 @@ import {
 	type AnyClientEvent,
 	type AnyServerEvent
 } from './types';
+import { GameSchema } from '$lib/schemas';
 
 /*
 	CLIENT
 */
 type SchemaByClientEventName = {
-	[E in ClientEventName]: z.ZodObject<{ name: z.ZodLiteral<E> }>;
+	[E in ClientEventName]: z.ZodObject<{ eventName: z.ZodLiteral<E> }>;
 };
 
 export const SchemaByClientEventName = {
-	[ClientEventName.Test]: z.object({
-		name: z.literal(ClientEventName.Test),
-		field: z.string()
-	}),
-	[ClientEventName.Test2]: z.object({
-		name: z.literal(ClientEventName.Test2),
-		otherField: z.number()
+	[ClientEventName.Join]: z.object({
+		eventName: z.literal(ClientEventName.Join),
+		gameId: z.string(),
+		name: z.string()
 	})
 } satisfies SchemaByClientEventName;
 
 const BaseClientEventSchema = z.object({
-	name: z.nativeEnum(ClientEventName)
+	eventName: z.nativeEnum(ClientEventName)
 });
 
 export const getClientEventName = (o: unknown): ClientEventName => {
-	const { name } = BaseClientEventSchema.parse(o);
-	return name;
+	const { eventName } = BaseClientEventSchema.parse(o);
+	return eventName;
 };
 
 export const parseClientEvent = (o: unknown): AnyClientEvent => {
@@ -43,27 +41,23 @@ export const parseClientEvent = (o: unknown): AnyClientEvent => {
 	SERVER
 */
 type SchemaByServerEventName = {
-	[E in ServerEventName]: z.ZodObject<{ name: z.ZodLiteral<E> }>;
+	[E in ServerEventName]: z.ZodObject<{ eventName: z.ZodLiteral<E> }>;
 };
 
 export const SchemaByServerEventName = {
-	[ServerEventName.Test]: z.object({
-		name: z.literal(ServerEventName.Test),
-		field: z.string()
-	}),
-	[ServerEventName.Test2]: z.object({
-		name: z.literal(ServerEventName.Test2),
-		otherField: z.number()
+	[ServerEventName.GameUpdate]: z.object({
+		eventName: z.literal(ServerEventName.GameUpdate),
+		game: GameSchema
 	})
 } satisfies SchemaByServerEventName;
 
 const BaseServerEventSchema = z.object({
-	name: z.nativeEnum(ServerEventName)
+	eventName: z.nativeEnum(ServerEventName)
 });
 
 export const getServerEventName = (o: unknown): ServerEventName => {
-	const { name } = BaseServerEventSchema.parse(o);
-	return name;
+	const { eventName } = BaseServerEventSchema.parse(o);
+	return eventName;
 };
 
 export const parseServerEvent = (o: unknown): AnyServerEvent => {

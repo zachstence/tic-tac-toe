@@ -9,16 +9,7 @@
 	const createGame = async (): Promise<void> => {
 		const response = await fetch('/games', { method: 'POST' });
 		const { gameId } = await response.json();
-		await joinGame(gameId);
-	};
-
-	const joinGame = async (gameId: string): Promise<void> => {
-		const response = await fetch(`/games/${gameId}/join`, {
-			method: 'POST',
-			body: JSON.stringify({ name: 'Zach' }) // TODO accept name from user
-		});
-		const { url } = await response.json();
-		goto(url);
+		goto(`games/${gameId}`);
 	};
 
 	const deleteGame = async (gameId: string): Promise<void> => {
@@ -45,8 +36,7 @@
 				<td>{game.id}</td>
 				<td>{game.players.length}</td>
 				<td>
-					<a href={`games/${game.id}`}>View</a>
-					<button on:click={() => joinGame(game.id)}>Join</button>
+					<a href={`games/${game.id}`}>Join</a>
 					<button on:click={() => deleteGame(game.id)}>Delete</button>
 				</td>
 			</tr>
