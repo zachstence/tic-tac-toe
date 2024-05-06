@@ -73,8 +73,12 @@ export class GameService {
 		if (player.positions.length === 3) {
 			player.positions.pop();
 		}
-
 		player.positions.unshift(position);
+
+		const otherPlayer = game.players.find((p) => p.id !== playerId);
+		game.activePlayerId = otherPlayer!.id;
+
+		GameService.setWinner(game);
 
 		await this.redisService.setJson(this.buildKey(gameId), game);
 		return game;
@@ -85,7 +89,7 @@ export class GameService {
 		await this.redisService.remove(key);
 	};
 
-	setWinner = (game: Game): void => {
+	static setWinner = (game: Game): void => {
 		const winner = game.players.find((player) => {
 			return WINNING_POSITIONS.some((winningPosition) => {
 				return winningPosition.every((position) =>
@@ -93,7 +97,10 @@ export class GameService {
 				);
 			});
 		});
-		game.winningPlayerId = winner?.id;
+		if (winner) {
+			game.state = GameState.Finished;
+			game.winningPlayerId = winner.id;
+		}
 	};
 
 	private buildKey = (gameId: string): string => {
